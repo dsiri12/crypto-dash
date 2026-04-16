@@ -30,7 +30,7 @@ const App = () => {
 
         const data = (await res.json()) as CoinType[];
 
-        console.log(data);
+        // console.log(data);
         setCoins(data);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

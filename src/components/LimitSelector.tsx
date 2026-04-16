@@ -1,3 +1,5 @@
+import type { ChangeEvent } from "react";
+
 type Props = {
   limit: number;
   onLimitChange: (limit2: number) => void;
@@ -6,6 +8,11 @@ type Props = {
 // const LimitSelector = (props: Props) => {
 //   const {limit, onLimitChange} = props
 const LimitSelector = ({ limit, onLimitChange }: Props) => {
+  const handleOnChange = (event: ChangeEvent<HTMLSelectElement, HTMLSelectElement>) => {
+    const selectedValue = Number(event.target.value)
+    onLimitChange(selectedValue)
+  }
+  
   return (
     <div className="controls">
       <label htmlFor="limit">Show: </label>
@@ -13,7 +20,7 @@ const LimitSelector = ({ limit, onLimitChange }: Props) => {
       <select
         value={limit}
         id="limit"
-        onChange={(e) => onLimitChange(Number(e.target.value))}
+        onChange={handleOnChange}
       >
         <option value="5">5</option>
         <option value="10">10</option>
