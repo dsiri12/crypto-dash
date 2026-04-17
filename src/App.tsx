@@ -16,38 +16,41 @@ const App = () => {
 
   const [filter, setFilter] = useState("");
 
+  const [sortBy, setSortBy] = useState("market_cap_desc");
+
   const setLimit2 = (limit2: number) => setLimit(limit2);
 
+  const fetchCoins = async () => {
+    try {
+      const url = `${API_URL}&order=${sortBy}&per_page=${limit}&page=1&sparkline=false`;
+
+      const res = await fetch(url, {
+        headers: {
+          "x-cg-demo-api-key": API_KEY,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch data");
+
+      const data = (await res.json()) as CoinType[];
+
+      setCoins(data);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setError(error.message || "unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchCoins = async () => {
-      try {
-        const url = `${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`;
-
-        const res = await fetch(url, {
-          headers: {
-            "x-cg-demo-api-key": API_KEY,
-          },
-        });
-
-        if (!res.ok) throw new Error("Failed to fetch data");
-
-        const data = (await res.json()) as CoinType[];
-
-        // console.log(data);
-        setCoins(data);
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setError(error.message || "unknown error");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCoins();
-  }, [limit]);
+  }, [limit, sortBy]);
 
   const handleFilterChange = (value: string) => setFilter(value);
+
+  const handleSortByChange = (value: string) => setSortBy(value);
 
   const filteredCoins = coins.filter((coin) => {
     return (
@@ -67,6 +70,18 @@ const App = () => {
       <div className="top-controls">
         <FilterInput filter={filter} handleFilterChange={handleFilterChange} />
         <LimitSelector limit={limit} onLimitChange={setLimit2} />
+
+        <div className="controls">
+          <label htmlFor="sort">Sort By:</label>
+          <select
+            id="sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="market_cap_desc">Market Cap (High To Low)</option>
+            <option value="market_cap_asc">Market Cap (Low To High)</option>
+          </select>
+        </div>
       </div>
 
       {!loading && !error && (
