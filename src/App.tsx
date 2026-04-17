@@ -4,6 +4,7 @@ import type { CoinType } from "./types/CoinType";
 import CoinCard from "./components/CoinCard";
 import LimitSelector from "./components/LimitSelector";
 import FilterInput from "./components/FilterInput";
+import SortBySelector from "./components/SortBySelector";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_CG_DEMO_API_KEY;
@@ -68,20 +69,13 @@ const App = () => {
       {error && <div className="error">{error}</div>}
 
       <div className="top-controls">
-        <FilterInput filter={filter} handleFilterChange={handleFilterChange} />
+        <FilterInput filter={filter} onFilterChange={handleFilterChange} />
         <LimitSelector limit={limit} onLimitChange={setLimit2} />
 
-        <div className="controls">
-          <label htmlFor="sort">Sort By:</label>
-          <select
-            id="sort"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="market_cap_desc">Market Cap (High To Low)</option>
-            <option value="market_cap_asc">Market Cap (Low To High)</option>
-          </select>
-        </div>
+        <SortBySelector
+          sortBy={sortBy}
+          onSortByChange={handleSortByChange}
+        />
       </div>
 
       {!loading && !error && (

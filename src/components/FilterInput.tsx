@@ -2,13 +2,13 @@ import type { ChangeEvent } from "react";
 
 type Props = {
   filter: string;
-  handleFilterChange: (value: string) => void;
+  onFilterChange: (value: string) => void;
 };
 
-const FilterInput = ({ filter, handleFilterChange }: Props) => {
+const FilterInput = ({ filter, onFilterChange }: Props) => {
   const handleChange = (
     event: ChangeEvent<HTMLInputElement, HTMLInputElement>,
-  ) => handleFilterChange(event.target.value);
+  ) => onFilterChange(event.target.value);
 
   return (
     <div className="filter">
